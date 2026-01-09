@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>รายละเอียดงาน</title>
+<style>
+body {
+  font-family: "TH SarabunPSK", sans-serif;
+  font-size: 14px;
+  margin: 40px;
+  color: #000;
+}
+h3 {
+  text-align: center;
+  margin-bottom: 0;
+}
+p.right {
+  text-align: right;
+  margin-top: 5px;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin-bottom: 15px;
+}
+th, td {
+  border: 1px solid #000;
+  padding: 5px 6px;
+  vertical-align: top;
+}
+th {
+  text-align: center;
+  background: #f5f5f5;
+}
+input[type="text"], input[type="date"], input[type="number"], textarea {
+  width: 100%;
+  border: none;
+  border-bottom: 1px dotted #000;
+  font-size: 14px;
+  font-family: "TH SarabunPSK", sans-serif;
+  outline: none;
+  background: transparent;
+}
+input[type="date"] {
+  padding: 2px 4px;
+  border: none;
+  border-bottom: 1px dotted #000;
+  background: transparent;
+  position: relative;
+  color: transparent;
+}
+input[type="date"]::before {
+  content: attr(data-thai-date);
+  position: absolute;
+  left: 0;
+  color: #000;
+  pointer-events: none;
+}
+input[type="date"]::-webkit-datetime-edit {
+  color: transparent;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  position: absolute;
+  right: 0;
+  opacity: 0.5;
+  cursor: pointer;
+}
+textarea {
+  resize: none;
+  height: 60px;
+}
+input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-right: 4px;
+}
+button, .btnH {
+  display: inline-block;
+  margin: 20px auto;
+  font-size: 14px;
+  padding: 8px 16px;
+  background: #c00;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.15);
+}
+button:hover, .btnH:hover { 
+  background: #a00; 
+}
+.status { 
+  text-align: center; 
+  font-weight: bold; 
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 5px;
+}
+.status.loading {
+  color: #0066cc;
+  background: #e6f2ff;
+}
+.status.success {
+  color: green;
+  background: #e6ffe6;
+}
+.status.error {
+  color: red;
+  background: #ffe6e6;
+}
+.form-container {
+  display: none;
+}
+.form-container.active {
+  display: block;
+}
+.loading-screen {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+}
+</style>
+</head>
+<body>
+
+<div>
+  <a href="home.html" class="btnH" id="backBtn">กลับไปหน้าปฏิทิน</a>
+</div>
+
+<p class="right">
+  เอกสารแนบใบสั่งงาน<br>
+  ฝ่ายวิศวกรรมและฝึกอบรม
+</p>
+
+<div id="loadingScreen" class="loading-screen">
+  <h3>🔍 กำลังค้นหาข้อมูล...</h3>
+  <p>กรุณารอสักครู่</p>
+</div>
+
+<!-- ฟอร์มที่ 1: การติดตั้งและส่งมอบ (report_send) -->
+<div id="form1" class="form-container">
+  <h3>ข้อมูลเบื้องต้นการติดตั้งและส่งมอบ (รายละเอียด)</h3><br><br>
+
+  <div style="margin-bottom:20px;">
+    <label>เลขที่งาน (Job Number): </label>
+    <input type="text" id="jobNumberInput1" readonly>
+  </div>
+
+  <table>
+    <tr>
+      <th>แผนดำเนินการ</th>
+      <th>วันที่</th>
+      <th>เวลา</th>
+    </tr>
+    <tr><td>ออกเดินทางจาก Office</td><td><input type="text" id="startDateInput1" readonly></td><td><input type="text" id="time1_f1" readonly></td></tr>
+    <tr><td>เข้าติดตั้งชุดฝึก</td><td><input type="text" id="date2_f1" readonly></td><td><input type="text" id="time2_f1" readonly></td></tr>
+    <tr><td>ส่งมอบชุดฝึก</td><td><input type="text" id="date3_f1" readonly></td><td><input type="text" id="time3_f1" readonly></td></tr>
+    <tr><td>เดินทางกลับ Office</td><td><input type="text" id="endDateInput1" readonly></td><td><input type="text" id="time4_f1" readonly></td></tr>
+  </table>
+
+  <table>
+    <tr>
+      <td>แผนการเดินทาง</td>
+      <td><label><input type="checkbox" id="car_company_f1" disabled> รถบริษัท</label></td>
+      <td><label><input type="checkbox" id="car_sales_f1" disabled> รถ Sales</label></td>
+      <td><label><input type="checkbox" id="bus_f1" disabled> รถประจำทาง</label></td>
+      <td><label><input type="checkbox" id="plane_f1" disabled> เครื่องบิน</label></td>
+    </tr>
+    <tr>
+      <td>Sales ไปด้วยหรือไม่:</td>
+      <td><label><input type="checkbox" id="sales_no_f1" disabled> ไม่ไป</label></td>
+      <td><label><input type="checkbox" id="sales_yes_f1" disabled> ไป</label></td>
+      <td><label><input type="checkbox" id="sales_together_f1" disabled> ไปด้วยกัน</label></td>
+      <td><label><input type="checkbox" id="sales_separate_f1" disabled> แยกกันไป</label></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr><th>ลำดับที่</th><th>รายการชุดฝึกและอุปกรณ์ที่จะทำการส่งมอบ</th><th>จำนวน</th></tr>
+    <tr><td>1</td><td><textarea id="item1_f1" readonly></textarea></td><td><input type="text" id="qty1_f1" readonly></td></tr>
+    <tr><td>2</td><td><textarea id="item2_f1" readonly></textarea></td><td><input type="text" id="qty2_f1" readonly></td></tr>
+    <tr><td>3</td><td><textarea id="item3_f1" readonly></textarea></td><td><input type="text" id="qty3_f1" readonly></td></tr>
+    <tr><td>4</td><td><textarea id="item4_f1" readonly></textarea></td><td><input type="text" id="qty4_f1" readonly></td></tr>
+    <tr><td>5</td><td><textarea id="item5_f1" readonly></textarea></td><td><input type="text" id="qty5_f1" readonly></td></tr>
+  </table>
+
+  <table>
+    <tr><th colspan="3">รูปแบบการขนย้าย</th></tr>
+    <tr>
+      <td><label><input type="checkbox" id="move_all_top_f1" disabled> จ้างย้ายทั้งหมด</label></td>
+      <td><label><input type="checkbox" id="move_all_bottom_f1" disabled> ขนย้ายเองทั้งหมด</label></td>
+      <td><label><input type="checkbox" id="move_partial_f1" disabled> จ้างขนย้ายบางส่วน และ ขนไปเองบางส่วน</label></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr><th>รายการ</th><th>จำนวน</th></tr>
+    <tr><td><textarea id="carry1_f1" readonly></textarea></td><td><input type="text" id="carryQty1_f1" readonly></td></tr>
+    <tr><td><textarea id="carry2_f1" readonly></textarea></td><td><input type="text" id="carryQty2_f1" readonly></td></tr>
+    <tr><td><textarea id="carry3_f1" readonly></textarea></td><td><input type="text" id="carryQty3_f1" readonly></td></tr>
+  </table>
+
+  <table>
+    <tr><th>ห้องที่ทำการติดตั้งชุดฝึกอยู่ตึกไหน (แผนที่)...</th></tr>
+    <tr><td><textarea id="roomInfo_f1" readonly></textarea></td></tr>
+    <tr><th>ต้องมีการติดตั้งอุปกรณ์ใดเพิ่มเติมอีกหรือไม่...</th></tr>
+    <tr><td><textarea id="extraEquip_f1" readonly></textarea></td></tr>
+  </table>
+</div>
+
+<!-- ฟอร์มที่ 2: งานการจัดแสดงหรือสาธิต (report2) -->
+<div id="form2" class="form-container">
+  <h3>ข้อมูลเบื้องต้นงานการจัดแสดงหรือสาธิต</h3><br><br>
+
+  <div style="margin-bottom:20px;">
+    <label>เลขที่งาน (Job Number): </label>
+    <input type="text" id="jobNumberInput2" readonly>
+  </div>
+
+  <table>
+    <tr><th>แผนดำเนินการ</th><th>วันที่</th><th>เวลา</th></tr>
+    <tr><td>ออกเดินทางจาก Office</td><td><input type="text" id="startDateInput2" readonly></td><td><input type="text" id="time1_f2"></td></tr>
+    <tr><td>เข้าติดตั้งชุดฝึก</td><td><input type="date" id="date2_f2"></td><td><input type="text" id="time2_f2"></td></tr>
+    <tr><td>ส่งมอบชุดฝึก</td><td><input type="date" id="date3_f2"></td><td><input type="text" id="time3_f2"></td></tr>
+    <tr><td>เดินทางกลับ Office</td><td><input type="text" id="endDateInput2" readonly></td><td><input type="text" id="time4_f2"></td></tr>
+  </table>
+
+  <table>
+    <tr>
+      <td>แผนการเดินทาง</td>
+      <td><label><input type="checkbox" id="car_company_f2"> รถบริษัท</label></td>
+      <td><label><input type="checkbox" id="car_sales_f2"> รถ Sales</label></td>
+      <td><label><input type="checkbox" id="bus_f2"> รถประจำทาง</label></td>
+      <td><label><input type="checkbox" id="plane_f2"> เครื่องบิน</label></td>
+    </tr>
+    <tr>
+      <td>Sales ไปด้วยหรือไม่:</td>
+      <td><label><input type="checkbox" id="sales_no_f2"> ไม่ไป</label></td>
+      <td><label><input type="checkbox" id="sales_yes_f2"> ไป</label></td>
+      <td><label><input type="checkbox" id="sales_together_f2"> ไปด้วยกัน</label></td>
+      <td><label><input type="checkbox" id="sales_separate_f2"> แยกกันไป</label></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr><td>มีบริษัทอื่นร่วมจัดแสดงในงานหรือไม่:</td>
+      <td><label><input type="checkbox" id="company_have_f2"> มี</label></td>
+      <td><label><input type="checkbox" id="company_not_have_f2"> ไม่มี</label></td></tr>
+    <tr><td>มีหมายกำหนดงานหรือไม่:</td>
+      <td><label><input type="checkbox" id="schedule_have_f2"> มี(แนบ)</label></td>
+      <td><label><input type="checkbox" id="schedule_not_have_f2"> ไม่มี</label></td></tr>
+    <tr><td>มีแผนผังขนาดพื้นที่จัดแสดงหรือไม่:</td>
+      <td><label><input type="checkbox" id="map_have_f2"> มี(แนบ)</label></td>
+      <td><label><input type="checkbox" id="map_not_have_f2"> ไม่มี</label></td></tr>
+    <tr><td>มีปลั๊กไฟหรือไม่:</td>
+      <td><label><input type="checkbox" id="plug_have_f2"> มี</label></td>
+      <td><label><input type="checkbox" id="plug_not_have_f2"> ไม่มี</label></td></tr>
+    <tr><td>มีปั๊มลมหรือจุดจ่ายลมให้หรือไม่:</td>
+      <td><label><input type="checkbox" id="air_have_f2"> มี</label></td>
+      <td><label><input type="checkbox" id="air_not_have_f2"> ไม่มี</label></td></tr>
+  </table>
+
+  <table>
+    <th colspan="4">อุปกรณ์ที่นำไปจัดแสดงหรือสาธิต</th>
+    <tr>
+      <td><label><input type="checkbox" id="MPUA_f2"> MPU-A</label></td>
+      <td><label><input type="checkbox" id="MPUB_f2"> MPU-B</label></td>
+      <td><label><input type="checkbox" id="MPUC_f2"> MPU-C</label></td>
+      <td><label><input type="checkbox" id="MPUD_f2"> MPU-D</label></td>
+    </tr>
+  </table>
+
+  <table>
+    <th>- ชุดแมคคาทรอนิกส์</th>
+    <td><label><input type="checkbox" id="MC_01_f2"> MC-01</label></td>
+    <td><label><input type="checkbox" id="MC_02_f2"> MC-02</label></td>
+    <td><label><input type="checkbox" id="MC_03_f2"> MC-03</label></td>
+  </table>
+
+  <table>
+    <tr><th>PLC ยี่ห้อ</th><td><input type="text" id="PLC1_f2"></td><th>รุ่น</th><td><input type="text" id="ver_f2"></td></tr>
+    <tr><th>หุ่นยนต์ยี่ห้อ</th><td><input type="text" id="BOT_f2"></td><th>รุ่น</th><td><input type="text" id="ver2_f2"></td></tr>
+    <tr><th>โต๊ะวางหุ่นยนต์ ขนาด</th><td colspan="3"><input type="text" id="tableSize_f2"></td></tr>
+    <tr><th>ชุดฝึกและอุปกรณ์อื่นๆ ได้แก่</th></tr>
+    <tr><td colspan="4"><input type="text" id="otherEquip_f2"></td></tr>
+  </table>
+
+  <table>
+    <tr><th colspan="3">รูปแบบการขนย้าย</th></tr>
+    <tr>
+      <td><label><input type="checkbox" id="move_all_top_f2"> จ้างย้ายทั้งหมด</label></td>
+      <td><label><input type="checkbox" id="move_all_bottom_f2"> ขนย้ายเองทั้งหมด</label></td>
+      <td><label><input type="checkbox" id="move_partial_f2"> จ้างขนย้ายบางส่วน</label></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr><th>รายการ</th><th>จำนวน</th></tr>
+    <tr><td><input type="text" id="carry1_f2"></td><td><input type="text" id="carryQty1_f2"></td></tr>
+    <tr><td><input type="text" id="carry2_f2"></td><td><input type="text" id="carryQty2_f2"></td></tr>
+    <tr><td><input type="text" id="carry3_f2"></td><td><input type="text" id="carryQty3_f2"></td></tr>
+  </table>
+
+  <table>
+    <tr><th>ห้องที่ทำการติดตั้งชุดฝึกอยู่ตึกไหน (แผนที่)...</th></tr>
+    <tr><td><input type="text" id="roomInfo_f2"></td></tr>
+  </table>
+
+  <button onclick="saveForm2()">💾 บันทึกข้อมูล</button>
+</div>
+
+<!-- ฟอร์มที่ 3: งานตรวจซ่อม (report3) -->
+<div id="form3" class="form-container">
+  <h3>ข้อมูลเบื้องต้นงานตรวจซ่อม</h3><br><br>
+
+  <div style="margin-bottom:20px;">
+    <label>เลขที่งาน (Job Number): </label>
+    <input type="text" id="jobNumberInput3" readonly>
+  </div>
+
+  <table>
+    <tr><th>แผนดำเนินการ</th><th>วันที่</th><th>เวลา</th></tr>
+    <tr><td>ออกเดินทางจาก Office</td><td><input type="text" id="startDateInput3" readonly></td><td><input type="text" id="time1_f3"></td></tr>
+    <tr><td>ตรวจซ่อม</td><td><input type="date" id="date2_f3"></td><td><input type="text" id="time2_f3"></td></tr>
+    <tr><td>เดินทางกลับ Office</td><td><input type="text" id="endDateInput3" readonly></td><td><input type="text" id="time4_f3"></td></tr>
+  </table>
+
+  <table>
+    <tr>
+      <td>แผนการเดินทาง</td>
+      <td><label><input type="checkbox" id="car_company_f3"> รถบริษัท</label></td>
+      <td><label><input type="checkbox" id="car_sales_f3"> รถ Sales</label></td>
+      <td><label><input type="checkbox" id="bus_f3"> รถประจำทาง</label></td>
+      <td><label><input type="checkbox" id="plane_f3"> เครื่องบิน</label></td>
+    </tr>
+    <tr>
+      <td>Sales ไปด้วยหรือไม่:</td>
+      <td><label><input type="checkbox" id="sales_no_f3"> ไม่ไป</label></td>
+      <td><label><input type="checkbox" id="sales_yes_f3"> ไป</label></td>
+      <td><label><input type="checkbox" id="sales_together_f3"> ไปด้วยกัน</label></td>
+      <td><label><input type="checkbox" id="sales_separate_f3"> แยกกันไป</label></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td>รายการชุดฝึกที่ต้องการให้ตรวจซ่อม และรายละเอียดความเสียหายในเบื้องต้น :</td>
+    </tr>
+    <tr>
+      <td><input type="text" id="repair_detail_f3"></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td>ชุดฝึกยังอยู่ในช่วงเวลารับประกันหรือไม่:</td>
+      <td>
+        <label><input type="checkbox" id="warranty_yes_f3"> ใช่ รับประกันถึงวันที่ 
+          <input type="date" id="warranty_until_f3" style="width:auto; display:inline-block;">
+        </label>
+      </td>
+      <td><label><input type="checkbox" id="warranty_no_f3"> ไม่ใช่</label></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>ห้องที่วางชุดฝึกอยู่ที่ตึก</th>
+      <td><input type="text" id="building_f3"></td>
+      <th>ชั้นที่</th>
+      <td><input type="text" id="floor_f3"></td>
+    </tr>
+  </table>
+
+  <button onclick="saveForm3()">💾 บันทึกข้อมูล</button>
+</div>
+
+<!-- ฟอร์มที่ 4: งานการฝึกอบรม (report_training) -->
+<div id="form4" class="form-container">
+  <h3>ข้อมูลเบื้องต้นงานการฝึกอบรม</h3><br><br>
+
+  <div style="margin-bottom:15px;">
+    <label>เลขที่งาน (Job Number): </label>
+    <input type="text" id="jobNumberInput4" readonly>
+  </div>
+
+  <table>
+    <tr>
+      <th>แผนดำเนินการ</th>
+      <th>วันที่</th>
+      <th>เวลา</th>
+    </tr>
+    <tr>
+      <td>ออกเดินทางจาก Office</td>
+      <td><input type="text" id="startDateInput4" readonly></td>
+      <td><input type="text" id="time1_f4"></td>
+    </tr>
+    <tr>
+      <td>จัดเตรียมห้องฝึกอบรม</td>
+      <td><input type="date" id="date2_f4"></td>
+      <td><input type="text" id="time2_f4"></td>
+    </tr>
+    <tr>
+      <td>จัดฝึกอบรม</td>
+      <td><input type="date" id="date3_f4"></td>
+      <td><input type="text" id="time3_f4"></td>
+    </tr>
+    <tr>
+      <td>เดินทางกลับ Office</td>
+      <td><input type="text" id="endDateInput4" readonly></td>
+      <td><input type="text" id="time4_f4"></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td>แผนการเดินทาง</td>
+      <td><label><input type="checkbox" id="car_company_f4"> รถบริษัท</label></td>
+      <td><label><input type="checkbox" id="car_sales_f4"> รถ Sales</label></td>
+      <td><label><input type="checkbox" id="bus_f4"> รถประจำทาง</label></td>
+      <td><label><input type="checkbox" id="plane_f4"> เครื่องบิน</label></td>
+    </tr>
+    <tr>
+      <td>Sales ไปด้วยหรือไม่:</td>
+      <td><label><input type="checkbox" id="sales_no_f4"> ไม่ไป</label></td>
+      <td><label><input type="checkbox" id="sales_yes_f4"> ไป</label></td>
+      <td><label><input type="checkbox" id="sales_together_f4"> ไปด้วยกัน</label></td>
+      <td><label><input type="checkbox" id="sales_separate_f4"> แยกกันไป</label></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <th>หัวข้อการฝึกอบรม</th>
+      <td colspan="3"><input type="text" id="trainingTopic_f4"></td>
+    </tr>
+    <tr>
+      <th colspan="4">จำนวนผู้เข้าร่วมอบรม</th>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="checkbox" id="teacherCheck_f4"> อาจารย์และบุคลากรทางการศึกษา</td>
+      <td colspan="2">จำนวน <input type="number" id="teacherSum_f4" style="width:80px;"> คน</td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="checkbox" id="studentCheck_f4"> นักศึกษา</td>
+      <td colspan="2">จำนวน <input type="number" id="studentSum_f4" style="width:80px;"> คน</td>
+    </tr>
+    <tr>
+      <td colspan="2"><input type="checkbox" id="publicCheck_f4"> บุคคลทั่วไป</td>
+      <td colspan="2">จำนวน <input type="number" id="publicSum_f4" style="width:80px;"> คน</td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td>วัตถุประสงค์การฝึกอบรม</td>
+      <td>
+        <label><input type="checkbox" id="purposeAfterSale_f4"> ฝึกอบรมหลังการขาย ระยะเวลาตามสัญญา </label>
+        <input type="number" id="contractDays_f4" style="width:60px;"> วัน
+      </td>
+      <td>
+        <label><input type="checkbox" id="purposePromotion_f4"> ฝึกอบรมเพื่อส่งเสริมการขาย</label><br><br>
+        ในรูปแบบ<br>
+        <label><input type="checkbox" id="formatLecture_f4"> บรรยายเชิงสาธิต</label><br>
+        <label><input type="checkbox" id="formatHandsOn_f4"> ให้ลงมือปฏิบัติ</label>
+      </td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td>มีพิธีเปิดการฝึกอบรมหรือไม่</td>
+      <td><label><input type="checkbox" id="openCeremonyYes_f4"> มี</label></td>
+      <td><label><input type="checkbox" id="openCeremonyNo_f4"> ไม่มี</label></td>
+    </tr>
+    <tr>
+      <td>มีพิธีปิดการฝึกอบรมหรือไม่</td>
+      <td><label><input type="checkbox" id="closeCeremonyYes_f4"> มี</label></td>
+      <td><label><input type="checkbox" id="closeCeremonyNo_f4"> ไม่มี</label></td>
+    </tr>
+    <tr>
+      <td>มี Coffee Break หรือไม่</td>
+      <td>
+        <label><input type="checkbox" id="coffeeYes_f4"> มี</label><br>
+        <label><input type="checkbox" id="coffeeCompany_f4"> บริษัทเป็นผู้จัดเตรียม</label><br>
+        <label><input type="checkbox" id="coffeeCollege_f4"> วิทยาลัยเป็นผู้จัดเตรียม</label>
+      </td>
+      <td><label><input type="checkbox" id="coffeeNo_f4"> ไม่มี</label></td>
+    </tr>
+    <tr>
+      <td>มีจัดเลี้ยงอาหารเที่ยงหรือไม่</td>
+      <td>
+        <label><input type="checkbox" id="lunchYes_f4"> มี</label><br>
+        <label><input type="checkbox" id="lunchCompany_f4"> บริษัทเป็นผู้จัดเตรียม</label><br>
+        <label><input type="checkbox" id="lunchCollege_f4"> วิทยาลัยเป็นผู้จัดเตรียม</label>
+      </td>
+      <td><label><input type="checkbox" id="lunchNo_f4"> ไม่มี</label></td>
+    </tr>
+    <tr>
+      <td>มีมอบวุฒิบัตรหลังการอบรมหรือไม่</td>
+      <td>
+        <label><input type="checkbox" id="certYes_f4"> มี</label><br>
+        <label><input type="checkbox" id="certCompany_f4"> บริษัทเป็นผู้ออกวุฒิบัตร</label><br>
+        <label><input type="checkbox" id="certCollege_f4"> วิทยาลัยเป็นผู้ออกวุฒิบัตร</label>
+      </td>
+      <td><label><input type="checkbox" id="certNo_f4"> ไม่มี</label></td>
+    </tr>
+    <tr>
+      <td>มีวิทยากรจากบริษัทอื่นร่วมด้วยหรือไม่</td>
+      <td>
+        <label><input type="checkbox" id="guestSpeakerYes_f4"> มี</label><br>
+        ชื่อ <input type="text" id="guestSpeakerName_f4">
+      </td>
+      <td><label><input type="checkbox" id="guestSpeakerNo_f4"> ไม่มี</label></td>
+    </tr>
+  </table>
+
+  <table>
+    <tr>
+      <td>อบรมหัวข้อ <input type="text" id="trainingSubject_f4"></td>
+    </tr>
+    <tr>
+      <td>เอกสารประกอบการฝึกอบรมใครเป็นคนจัดเตรียมถ่ายเอกสารเข้าเล่ม</td>
+      <td>
+        <label><input type="checkbox" id="docCompany_f4"> บริษัทฯ</label><br>
+        <label><input type="checkbox" id="docCompanySelf_f4"> ถ่ายและเข้าเล่มเอง</label><br>
+        <label><input type="checkbox" id="docCompanyOutsource_f4"> จ้างภายนอกถ่ายและเข้าเล่ม</label>
+      </td>
+      <td><label><input type="checkbox" id="docCollege_f4"> วิทยาลัยฯ</label></td>
+    </tr>
+  </table>
+
+  <b>กรณีที่ต้องมีการขนย้ายชุดฝึกจาก Office เพื่อใช้ในการสาธิตหรือฝึกอบรมแบบลงมือปฏิบัติ</b>
+  <table>
+    <tr><th colspan="3">รูปแบบการขนย้าย</th></tr>
+    <tr>
+      <td><label><input type="checkbox" id="move_all_top_f4"> จ้างย้ายทั้งหมด</label></td>
+      <td><label><input type="checkbox" id="move_all_bottom_f4"> ขนย้ายเองทั้งหมด</label></td>
+      <td><label><input type="checkbox" id="move_partial_f4"> จ้างขนย้ายบางส่วน และ ขนไปเองบางส่วน</label></td>
+    </tr>
+  </table>
+
+  <p>ส่วนที่ขนไปเองมีรายการดังนี้:</p>
+  <table>
+    <tr><th>รายการ</th><th>จำนวน</th></tr>
+    <tr><td><textarea id="carry1_f4"></textarea></td><td><input type="text" id="carryQty1_f4"></td></tr>
+    <tr><td><textarea id="carry2_f4"></textarea></td><td><input type="text" id="carryQty2_f4"></td></tr>
+    <tr><td><textarea id="carry3_f4"></textarea></td><td><input type="text" id="carryQty3_f4"></td></tr>
+  </table>
+
+  <table>
+    <tr><th>ห้องที่ทำการติดตั้งชุดฝึกอยู่ตึกไหน (แผนที่)...</th></tr>
+    <tr><td><textarea id="roomInfo_f4"></textarea></td></tr>
+    <tr><th>ต้องมีการติดตั้งอุปกรณ์ใดเพิ่มเติมอีกหรือไม่...</th></tr>
+    <tr><td><textarea id="extraEquip_f4"></textarea></td></tr>
+  </table>
+
+  <div style="text-align: center;">
+    <button onclick="saveForm4()">💾 บันทึกข้อมูล</button>
+  </div>
+</div>
+
+<div id="statusMsg" class="status"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, get, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAXayBBLVSohNCIsnlWRq6rD0BUbW70MGk",
+  authDomain: "events-666d6.firebaseapp.com",
+  databaseURL: "https://events-666d6-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "events-666d6",
+  storageBucket: "events-666d6.firebasestorage.app",
+  messagingSenderId: "589078390914",
+  appId: "1:589078390914:web:480ce96137ffac835aac9b",
+  measurementId: "G-97GD75S814"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+// ดึง parameters จาก URL
+const params = new URLSearchParams(window.location.search);
+const jobNumber = params.get("jobNumber") || params.get("job") || "";
+const start = params.get("start") || "";
+const end = params.get("end") || "";
+
+// ฟังก์ชันแปลงวันที่
+function formatDateThai(dateStr) {
+  if (!dateStr) return "";
+  
+  let date;
+  // ถ้าเป็นรูปแบบ ISO (YYYY-MM-DD)
+  if (typeof dateStr === 'string' && dateStr.includes('-') && dateStr.length === 10) {
+    const [year, month, day] = dateStr.split('-');
+    date = new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
+  } else {
+    date = new Date(dateStr);
+  }
+  
+  // ตรวจสอบว่า date ถูกต้องหรือไม่
+  if (isNaN(date.getTime())) return "";
+  
+  const day = date.getDate();
+  const month = date.getMonth() + 1;
+  const year = date.getFullYear() + 543;
+  
+  return `${day}/${month}/${year}`;
+}
+
+function isoToThai(isoDate) {
+  if (!isoDate || typeof isoDate !== 'string') return "";
+  if (!isoDate.includes("-")) return isoDate; // ถ้าไม่ใช่ ISO format ให้คืนค่าเดิม
+  
+  const parts = isoDate.split("-");
+  if (parts.length !== 3) return "";
+  
+  const year = parseInt(parts[0]);
+  const month = parseInt(parts[1]);
+  const day = parseInt(parts[2]);
+  
+  // ตรวจสอบความถูกต้อง
+  if (isNaN(year) || isNaN(month) || isNaN(day)) return "";
+  if (year < 1900 || year > 3000) return ""; // ป้องกันปีที่ไม่สมเหตุสมผล
+  
+  return `${day}/${month}/${year + 543}`;
+}
+
+function thaiToIso(thaiDate) {
+  if (!thaiDate || typeof thaiDate !== 'string') return "";
+  if (!thaiDate.includes("/")) return thaiDate; // ถ้าไม่ใช่รูปแบบไทยให้คืนค่าเดิม
+  
+  const parts = thaiDate.split("/");
+  if (parts.length !== 3) return "";
+  
+  const day = parseInt(parts[0]);
+  const month = parseInt(parts[1]);
+  const year = parseInt(parts[2]);
+  
+  // ตรวจสอบความถูกต้อง
+  if (isNaN(day) || isNaN(month) || isNaN(year)) return "";
+  
+  // แปลงจากพ.ศ. เป็น ค.ศ.
+  const gregorianYear = year > 2500 ? year - 543 : year;
+  
+  const dayStr = day.toString().padStart(2, "0");
+  const monthStr = month.toString().padStart(2, "0");
+  
+  return `${gregorianYear}-${monthStr}-${dayStr}`;
+}
+
+function updateThaiDateDisplay(fieldId, isoDate) {
+  if (!isoDate) return;
+  const thaiDate = isoToThai(isoDate);
+  const field = document.getElementById(fieldId);
+  if (field) field.setAttribute("data-thai-date", thaiDate);
+}
+
+// ฟังก์ชันแสดงสถานะ
+function showStatus(message, type = 'loading') {
+  const statusMsg = document.getElementById("statusMsg");
+  statusMsg.textContent = message;
+  statusMsg.className = `status ${type}`;
+}
+
+// ฟังก์ชันแสดงฟอร์ม
+function showForm(formNumber) {
+  document.getElementById("loadingScreen").style.display = "none";
+  for (let i = 1; i <= 4; i++) {
+    document.getElementById(`form${i}`).classList.remove("active");
+  }
+  document.getElementById(`form${formNumber}`).classList.add("active");
+}
+
+// ฟังก์ชันโหลดข้อมูล Form 1 (report_send)
+async function loadForm1Data(data) {
+  console.log("Loading Form 1 with data:", data);
+  console.log("Start date:", start, "End date:", end);
+  
+  document.getElementById("jobNumberInput1").value = jobNumber;
+  
+  // แปลงวันที่โดยตรวจสอบรูปแบบก่อน
+  const startDateFormatted = formatDateThai(start);
+  const endDateFormatted = formatDateThai(end);
+  
+  console.log("Formatted start:", startDateFormatted, "Formatted end:", endDateFormatted);
+  
+  document.getElementById("startDateInput1").value = startDateFormatted;
+  document.getElementById("endDateInput1").value = endDateFormatted;
+
+  // แสดงข้อมูลเวลาและวันที่
+  ["time1", "time2", "time3", "time4"].forEach(id => {
+    const element = document.getElementById(`${id}_f1`);
+    if (element) element.value = data[id] || "";
+  });
+
+  ["date2", "date3"].forEach(id => {
+    const element = document.getElementById(`${id}_f1`);
+    if (element && data[id]) {
+      element.value = data[id];
+    }
+  });
+
+  // Checkboxes
+  ["car_company", "car_sales", "bus", "plane",
+   "sales_no", "sales_yes", "sales_together", "sales_separate",
+   "move_all_top", "move_all_bottom", "move_partial"].forEach(id => {
+    const element = document.getElementById(`${id}_f1`);
+    if (element) element.checked = !!data[id];
+  });
+
+  // รายการอุปกรณ์
+  if (data.items) {
+    const itemsArray = Array.isArray(data.items) ? data.items : Object.values(data.items);
+    itemsArray.forEach((item, i) => {
+      const itemElement = document.getElementById(`item${i+1}_f1`);
+      const qtyElement = document.getElementById(`qty${i+1}_f1`);
+      if (itemElement) itemElement.value = item.name || "";
+      if (qtyElement) qtyElement.value = item.qty || "";
+    });
+  }
+
+  // รายการขนย้าย
+  if (data.carry) {
+    const carryArray = Array.isArray(data.carry) ? data.carry : Object.values(data.carry);
+    carryArray.forEach((item, i) => {
+      const carryElement = document.getElementById(`carry${i+1}_f1`);
+      const qtyElement = document.getElementById(`carryQty${i+1}_f1`);
+      if (carryElement) carryElement.value = item.item || "";
+      if (qtyElement) qtyElement.value = item.qty || "";
+    });
+  }
+
+  document.getElementById("roomInfo_f1").value = data.roomInfo || "";
+  document.getElementById("extraEquip_f1").value = data.extraEquip || "";
+
+  showForm(1);
+  showStatus("✅ พบข้อมูลจาก report_send", "success");
+}
+
+// ฟังก์ชันโหลดข้อมูล Form 2 (report2)
+async function loadForm2Data(data) {
+  document.getElementById("jobNumberInput2").value = jobNumber;
+  document.getElementById("startDateInput2").value = formatDateThai(start);
+  document.getElementById("endDateInput2").value = formatDateThai(end);
+
+  document.getElementById("time1_f2").value = data.time1 || "";
+  document.getElementById("time2_f2").value = data.time2 || "";
+  document.getElementById("time3_f2").value = data.time3 || "";
+  document.getElementById("time4_f2").value = data.time4 || "";
+
+  // วันที่แบบแก้ไขได้
+  if (data.date2) {
+    const iso2 = data.date2.includes("-") ? data.date2 : thaiToIso(data.date2);
+    document.getElementById("date2_f2").value = iso2;
+    updateThaiDateDisplay("date2_f2", iso2);
+  }
+
+  if (data.date3) {
+    const iso3 = data.date3.includes("-") ? data.date3 : thaiToIso(data.date3);
+    document.getElementById("date3_f2").value = iso3;
+    updateThaiDateDisplay("date3_f2", iso3);
+  }
+
+  // Checkboxes
+  const checkboxIds = [
+    "car_company", "car_sales", "bus", "plane",
+    "sales_no", "sales_yes", "sales_together", "sales_separate",
+    "company_have", "company_not_have", "schedule_have", "schedule_not_have",
+    "map_have", "map_not_have", "plug_have", "plug_not_have",
+    "air_have", "air_not_have", "MPUA", "MPUB", "MPUC", "MPUD",
+    "MC_01", "MC_02", "MC_03", "move_all_top", "move_all_bottom", "move_partial"
+  ];
+
+  checkboxIds.forEach(id => {
+    const element = document.getElementById(`${id}_f2`);
+    if (element) element.checked = !!data[id];
+  });
+
+  // Text fields
+  document.getElementById("PLC1_f2").value = data.PLC1 || "";
+  document.getElementById("ver_f2").value = data.ver || "";
+  document.getElementById("BOT_f2").value = data.BOT || "";
+  document.getElementById("ver2_f2").value = data.ver2 || "";
+  document.getElementById("tableSize_f2").value = data.tableSize || "";
+  document.getElementById("otherEquip_f2").value = data.otherEquip || "";
+  document.getElementById("roomInfo_f2").value = data.roomInfo || "";
+
+  // รายการขนย้าย
+  if (data.carry && data.carry.length) {
+    document.getElementById("carry1_f2").value = data.carry[0]?.item || "";
+    document.getElementById("carryQty1_f2").value = data.carry[0]?.qty || "";
+    document.getElementById("carry2_f2").value = data.carry[1]?.item || "";
+    document.getElementById("carryQty2_f2").value = data.carry[1]?.qty || "";
+    document.getElementById("carry3_f2").value = data.carry[2]?.item || "";
+    document.getElementById("carryQty3_f2").value = data.carry[2]?.qty || "";
+  }
+
+  // Event listeners สำหรับ date inputs
+  document.getElementById("date2_f2").addEventListener("change", function() {
+    updateThaiDateDisplay("date2_f2", this.value);
+  });
+
+  document.getElementById("date3_f2").addEventListener("change", function() {
+    updateThaiDateDisplay("date3_f2", this.value);
+  });
+
+  showForm(2);
+  showStatus("✅ พบข้อมูลจาก report2", "success");
+}
+
+// ฟังก์ชันโหลดข้อมูล Form 3 (report3)
+async function loadForm3Data(data) {
+  document.getElementById("jobNumberInput3").value = jobNumber;
+  document.getElementById("startDateInput3").value = formatDateThai(start);
+  document.getElementById("endDateInput3").value = formatDateThai(end);
+
+  document.getElementById("time1_f3").value = data.time1 || "";
+  document.getElementById("time2_f3").value = data.time2 || "";
+  document.getElementById("time4_f3").value = data.time4 || "";
+
+  if (data.date2) {
+    const iso2 = data.date2.includes("-") ? data.date2 : thaiToIso(data.date2);
+    document.getElementById("date2_f3").value = iso2;
+    updateThaiDateDisplay("date2_f3", iso2);
+  }
+
+  // Checkboxes
+  ["car_company", "car_sales", "bus", "plane",
+   "sales_no", "sales_yes", "sales_together", "sales_separate",
+   "warranty_yes", "warranty_no"].forEach(id => {
+    const element = document.getElementById(`${id}_f3`);
+    if (element) element.checked = !!data[id];
+  });
+
+  document.getElementById("repair_detail_f3").value = data.repair_detail || "";
+  document.getElementById("building_f3").value = data.building || "";
+  document.getElementById("floor_f3").value = data.floor || "";
+
+  if (data.warranty_until) {
+    const isoW = data.warranty_until.includes("-") ? data.warranty_until : thaiToIso(data.warranty_until);
+    document.getElementById("warranty_until_f3").value = isoW;
+    updateThaiDateDisplay("warranty_until_f3", isoW);
+  }
+
+  // Event listeners
+  document.getElementById("date2_f3").addEventListener("change", function() {
+    updateThaiDateDisplay("date2_f3", this.value);
+  });
+
+  document.getElementById("warranty_until_f3").addEventListener("change", function() {
+    updateThaiDateDisplay("warranty_until_f3", this.value);
+  });
+
+  showForm(3);
+  showStatus("✅ พบข้อมูลจาก report3", "success");
+}
+
+// ฟังก์ชันโหลดข้อมูล Form 4 (report_training)
+async function loadForm4Data(data) {
+  document.getElementById("jobNumberInput4").value = jobNumber;
+  document.getElementById("startDateInput4").value = formatDateThai(start);
+  document.getElementById("endDateInput4").value = formatDateThai(end);
+
+  document.getElementById("time1_f4").value = data.time1 || "";
+  document.getElementById("time2_f4").value = data.time2 || "";
+  document.getElementById("time3_f4").value = data.time3 || "";
+  document.getElementById("time4_f4").value = data.time4 || "";
+
+  if (data.date2) {
+    const iso2 = data.date2.includes("-") ? data.date2 : thaiToIso(data.date2);
+    document.getElementById("date2_f4").value = iso2;
+    updateThaiDateDisplay("date2_f4", iso2);
+  }
+
+  if (data.date3) {
+    const iso3 = data.date3.includes("-") ? data.date3 : thaiToIso(data.date3);
+    document.getElementById("date3_f4").value = iso3;
+    updateThaiDateDisplay("date3_f4", iso3);
+  }
+
+  document.getElementById("trainingTopic_f4").value = data.trainingTopic || "";
+
+  // Checkboxes - ทั้งหมด
+  const allCheckboxes = [
+    "car_company", "car_sales", "bus", "plane",
+    "sales_no", "sales_yes", "sales_together", "sales_separate",
+    "teacherCheck", "studentCheck", "publicCheck",
+    "purposeAfterSale", "purposePromotion", "formatLecture", "formatHandsOn",
+    "openCeremonyYes", "openCeremonyNo", "closeCeremonyYes", "closeCeremonyNo",
+    "coffeeYes", "coffeeCompany", "coffeeCollege", "coffeeNo",
+    "lunchYes", "lunchCompany", "lunchCollege", "lunchNo",
+    "certYes", "certCompany", "certCollege", "certNo",
+    "guestSpeakerYes", "guestSpeakerNo",
+    "docCompany", "docCompanySelf", "docCompanyOutsource", "docCollege",
+    "move_all_top", "move_all_bottom", "move_partial"
+  ];
+
+  allCheckboxes.forEach(id => {
+    const element = document.getElementById(`${id}_f4`);
+    if (element) element.checked = !!data[id];
+  });
+
+  // Number และ text inputs
+  document.getElementById("teacherSum_f4").value = data.teacherSum || "";
+  document.getElementById("studentSum_f4").value = data.studentSum || "";
+  document.getElementById("publicSum_f4").value = data.publicSum || "";
+  document.getElementById("contractDays_f4").value = data.contractDays || "";
+  document.getElementById("guestSpeakerName_f4").value = data.guestSpeakerName || "";
+  document.getElementById("trainingSubject_f4").value = data.trainingSubject || "";
+  document.getElementById("carry1_f4").value = data.carry1 || "";
+  document.getElementById("carryQty1_f4").value = data.carryQty1 || "";
+  document.getElementById("carry2_f4").value = data.carry2 || "";
+  document.getElementById("carryQty2_f4").value = data.carryQty2 || "";
+  document.getElementById("carry3_f4").value = data.carry3 || "";
+  document.getElementById("carryQty3_f4").value = data.carryQty3 || "";
+  document.getElementById("roomInfo_f4").value = data.roomInfo || "";
+  document.getElementById("extraEquip_f4").value = data.extraEquip || "";
+
+  // Event listeners
+  document.getElementById("date2_f4").addEventListener("change", function() {
+    updateThaiDateDisplay("date2_f4", this.value);
+  });
+
+  document.getElementById("date3_f4").addEventListener("change", function() {
+    updateThaiDateDisplay("date3_f4", this.value);
+  });
+
+  showForm(4);
+  showStatus("✅ พบข้อมูลจาก report_training", "success");
+}
+
+// ฟังก์ชันหลักในการค้นหาข้อมูล
+async function searchData() {
+  if (!jobNumber) {
+    showStatus("⚠️ ไม่พบหมายเลขงาน", "error");
+    return;
+  }
+
+  try {
+    // 1. ค้นหาใน Report/report_send
+    const reportSendRef = ref(db, 'Report/report_send');
+    const sendSnapshot = await get(reportSendRef);
+
+    if (sendSnapshot.exists()) {
+      let foundInSend = null;
+      sendSnapshot.forEach((childSnapshot) => {
+        const item = childSnapshot.val();
+        if (item.jobNumber === jobNumber) {
+          foundInSend = item;
+        }
+      });
+
+      if (foundInSend) {
+        await loadForm1Data(foundInSend);
+        return;
+      }
+    }
+
+    // 2. ค้นหาใน Report/report2
+    const report2Ref = ref(db, `Report/report2/${jobNumber}`);
+    const report2Snapshot = await get(report2Ref);
+
+    if (report2Snapshot.exists()) {
+      await loadForm2Data(report2Snapshot.val());
+      return;
+    }
+
+    // 3. ค้นหาใน Report/report3
+    const report3Ref = ref(db, `Report/report3/${jobNumber}`);
+    const report3Snapshot = await get(report3Ref);
+
+    if (report3Snapshot.exists()) {
+      await loadForm3Data(report3Snapshot.val());
+      return;
+    }
+
+    // 4. ค้นหาใน Report/report_training
+    const trainingRef = ref(db, `Report/report_training/${jobNumber}`);
+    const trainingSnapshot = await get(trainingRef);
+
+    if (trainingSnapshot.exists()) {
+      await loadForm4Data(trainingSnapshot.val());
+      return;
+    }
+
+    // ไม่พบข้อมูลเลย
+    showStatus("❌ ไม่พบข้อมูลงานนี้ในระบบ", "error");
+    
+  } catch (err) {
+    console.error("Error:", err);
+    showStatus("❌ เกิดข้อผิดพลาด: " + err.message, "error");
+  }
+}
+
+// ฟังก์ชันบันทึกข้อมูล Form 2
+window.saveForm2 = async function() {
+  const jobNum = document.getElementById("jobNumberInput2").value.trim();
+  if (!jobNum) {
+    alert("⚠️ กรุณากรอกเลขที่งานก่อนบันทึก");
+    return;
+  }
+
+  const data = {
+    jobNumber: jobNum,
+    date1: document.getElementById("startDateInput2").value,
+    time1: document.getElementById("time1_f2").value,
+    date2: document.getElementById("date2_f2").value,
+    time2: document.getElementById("time2_f2").value,
+    date3: document.getElementById("date3_f2").value,
+    time3: document.getElementById("time3_f2").value,
+    date4: document.getElementById("endDateInput2").value,
+    time4: document.getElementById("time4_f2").value,
+    car_company: document.getElementById("car_company_f2").checked,
+    car_sales: document.getElementById("car_sales_f2").checked,
+    bus: document.getElementById("bus_f2").checked,
+    plane: document.getElementById("plane_f2").checked,
+    sales_no: document.getElementById("sales_no_f2").checked,
+    sales_yes: document.getElementById("sales_yes_f2").checked,
+    sales_together: document.getElementById("sales_together_f2").checked,
+    sales_separate: document.getElementById("sales_separate_f2").checked,
+    company_have: document.getElementById("company_have_f2").checked,
+    company_not_have: document.getElementById("company_not_have_f2").checked,
+    schedule_have: document.getElementById("schedule_have_f2").checked,
+    schedule_not_have: document.getElementById("schedule_not_have_f2").checked,
+    map_have: document.getElementById("map_have_f2").checked,
+    map_not_have: document.getElementById("map_not_have_f2").checked,
+    plug_have: document.getElementById("plug_have_f2").checked,
+    plug_not_have: document.getElementById("plug_not_have_f2").checked,
+    air_have: document.getElementById("air_have_f2").checked,
+    air_not_have: document.getElementById("air_not_have_f2").checked,
+    MPUA: document.getElementById("MPUA_f2").checked,
+    MPUB: document.getElementById("MPUB_f2").checked,
+    MPUC: document.getElementById("MPUC_f2").checked,
+    MPUD: document.getElementById("MPUD_f2").checked,
+    MC_01: document.getElementById("MC_01_f2").checked,
+    MC_02: document.getElementById("MC_02_f2").checked,
+    MC_03: document.getElementById("MC_03_f2").checked,
+    PLC1: document.getElementById("PLC1_f2").value,
+    ver: document.getElementById("ver_f2").value,
+    BOT: document.getElementById("BOT_f2").value,
+    ver2: document.getElementById("ver2_f2").value,
+    tableSize: document.getElementById("tableSize_f2").value,
+    otherEquip: document.getElementById("otherEquip_f2").value,
+    move_all_top: document.getElementById("move_all_top_f2").checked,
+    move_all_bottom: document.getElementById("move_all_bottom_f2").checked,
+    move_partial: document.getElementById("move_partial_f2").checked,
+    carry: [
+      { item: document.getElementById("carry1_f2").value, qty: document.getElementById("carryQty1_f2").value },
+      { item: document.getElementById("carry2_f2").value, qty: document.getElementById("carryQty2_f2").value },
+      { item: document.getElementById("carry3_f2").value, qty: document.getElementById("carryQty3_f2").value }
+    ],
+    roomInfo: document.getElementById("roomInfo_f2").value,
+    timestamp: new Date().toISOString()
+  };
+
+  try {
+    await set(ref(db, `report2/${jobNum}`), data);
+    showStatus("✅ บันทึกข้อมูลเรียบร้อยแล้ว!", "success");
+    setTimeout(() => { window.location.href = "notchoose.html"; }, 1000);
+  } catch (err) {
+    showStatus("❌ เกิดข้อผิดพลาด: " + err.message, "error");
+  }
+};
+
+// ฟังก์ชันบันทึกข้อมูล Form 3
+window.saveForm3 = async function() {
+  const jobNum = document.getElementById("jobNumberInput3").value.trim();
+  if (!jobNum) {
+    alert("⚠️ กรุณากรอกเลขที่งานก่อนบันทึก");
+    return;
+  }
+
+  const data = {
+    jobNumber: jobNum,
+    date1: document.getElementById("startDateInput3").value,
+    time1: document.getElementById("time1_f3").value,
+    date2: document.getElementById("date2_f3").value,
+    time2: document.getElementById("time2_f3").value,
+    date4: document.getElementById("endDateInput3").value,
+    time4: document.getElementById("time4_f3").value,
+    car_company: document.getElementById("car_company_f3").checked,
+    car_sales: document.getElementById("car_sales_f3").checked,
+    bus: document.getElementById("bus_f3").checked,
+    plane: document.getElementById("plane_f3").checked,
+    sales_no: document.getElementById("sales_no_f3").checked,
+    sales_yes: document.getElementById("sales_yes_f3").checked,
+    sales_together: document.getElementById("sales_together_f3").checked,
+    sales_separate: document.getElementById("sales_separate_f3").checked,
+    repair_detail: document.getElementById("repair_detail_f3").value,
+    warranty_yes: document.getElementById("warranty_yes_f3").checked,
+    warranty_no: document.getElementById("warranty_no_f3").checked,
+    warranty_until: document.getElementById("warranty_until_f3").value,
+    building: document.getElementById("building_f3").value,
+    floor: document.getElementById("floor_f3").value,
+    timestamp: new Date().toISOString()
+  };
+
+  try {
+    await set(ref(db, `report3/${jobNum}`), data);
+    showStatus("✅ บันทึกข้อมูลเรียบร้อยแล้ว!", "success");
+    setTimeout(() => { window.location.href = "notchoose.html"; }, 1000);
+  } catch (err) {
+    showStatus("❌ เกิดข้อผิดพลาด: " + err.message, "error");
+  }
+};
+
+// ฟังก์ชันบันทึกข้อมูล Form 4
+window.saveForm4 = async function() {
+  const jobNum = document.getElementById("jobNumberInput4").value.trim();
+  if (!jobNum) {
+    alert("⚠️ กรุณากรอกเลขที่งานก่อนบันทึก");
+    return;
+  }
+
+  const data = {
+    jobNumber: jobNum,
+    startDate: start,
+    endDate: end,
+    time1: document.getElementById("time1_f4").value,
+    date2: document.getElementById("date2_f4").value,
+    time2: document.getElementById("time2_f4").value,
+    date3: document.getElementById("date3_f4").value,
+    time3: document.getElementById("time3_f4").value,
+    time4: document.getElementById("time4_f4").value,
+    trainingTopic: document.getElementById("trainingTopic_f4").value,
+    car_company: document.getElementById("car_company_f4").checked,
+    car_sales: document.getElementById("car_sales_f4").checked,
+    bus: document.getElementById("bus_f4").checked,
+    plane: document.getElementById("plane_f4").checked,
+    sales_no: document.getElementById("sales_no_f4").checked,
+    sales_yes: document.getElementById("sales_yes_f4").checked,
+    sales_together: document.getElementById("sales_together_f4").checked,
+    sales_separate: document.getElementById("sales_separate_f4").checked,
+    teacherCheck: document.getElementById("teacherCheck_f4").checked,
+    teacherSum: document.getElementById("teacherSum_f4").value,
+    studentCheck: document.getElementById("studentCheck_f4").checked,
+    studentSum: document.getElementById("studentSum_f4").value,
+    publicCheck: document.getElementById("publicCheck_f4").checked,
+    publicSum: document.getElementById("publicSum_f4").value,
+    purposeAfterSale: document.getElementById("purposeAfterSale_f4").checked,
+    contractDays: document.getElementById("contractDays_f4").value,
+    purposePromotion: document.getElementById("purposePromotion_f4").checked,
+    formatLecture: document.getElementById("formatLecture_f4").checked,
+    formatHandsOn: document.getElementById("formatHandsOn_f4").checked,
+    openCeremonyYes: document.getElementById("openCeremonyYes_f4").checked,
+    openCeremonyNo: document.getElementById("openCeremonyNo_f4").checked,
+    closeCeremonyYes: document.getElementById("closeCeremonyYes_f4").checked,
+    closeCeremonyNo: document.getElementById("closeCeremonyNo_f4").checked,
+    coffeeYes: document.getElementById("coffeeYes_f4").checked,
+    coffeeCompany: document.getElementById("coffeeCompany_f4").checked,
+    coffeeCollege: document.getElementById("coffeeCollege_f4").checked,
+    coffeeNo: document.getElementById("coffeeNo_f4").checked,
+    lunchYes: document.getElementById("lunchYes_f4").checked,
+    lunchCompany: document.getElementById("lunchCompany_f4").checked,
+    lunchCollege: document.getElementById("lunchCollege_f4").checked,
+    lunchNo: document.getElementById("lunchNo_f4").checked,
+    certYes: document.getElementById("certYes_f4").checked,
+    certCompany: document.getElementById("certCompany_f4").checked,
+    certCollege: document.getElementById("certCollege_f4").checked,
+    certNo: document.getElementById("certNo_f4").checked,
+    guestSpeakerYes: document.getElementById("guestSpeakerYes_f4").checked,
+    guestSpeakerName: document.getElementById("guestSpeakerName_f4").value,
+    guestSpeakerNo: document.getElementById("guestSpeakerNo_f4").checked,
+    trainingSubject: document.getElementById("trainingSubject_f4").value,
+    docCompany: document.getElementById("docCompany_f4").checked,
+    docCompanySelf: document.getElementById("docCompanySelf_f4").checked,
+    docCompanyOutsource: document.getElementById("docCompanyOutsource_f4").checked,
+    docCollege: document.getElementById("docCollege_f4").checked,
+    move_all_top: document.getElementById("move_all_top_f4").checked,
+    move_all_bottom: document.getElementById("move_all_bottom_f4").checked,
+    move_partial: document.getElementById("move_partial_f4").checked,
+    carry1: document.getElementById("carry1_f4").value,
+    carryQty1: document.getElementById("carryQty1_f4").value,
+    carry2: document.getElementById("carry2_f4").value,
+    carryQty2: document.getElementById("carryQty2_f4").value,
+    carry3: document.getElementById("carry3_f4").value,
+    carryQty3: document.getElementById("carryQty3_f4").value,
+    roomInfo: document.getElementById("roomInfo_f4").value,
+    extraEquip: document.getElementById("extraEquip_f4").value,
+    timestamp: new Date().toISOString()
+  };
+
+  try {
+    await set(ref(db, `report_training/${jobNum}`), data);
+    showStatus("✅ บันทึกข้อมูลเรียบร้อยแล้ว!", "success");
+    setTimeout(() => { window.location.href = "notchoose.html"; }, 1500);
+  } catch (err) {
+    showStatus("❌ เกิดข้อผิดพลาด: " + err.message, "error");
+  }
+};
+
+// เริ่มค้นหาข้อมูลทันทีเมื่อโหลดหน้า
+searchData();
+</script>
+
+</body>
+</html>
